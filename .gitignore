@@ -1,6 +1,5 @@
 node_modules/
 .env
-steps/
-assignment.md
+
 
 /generated/prisma

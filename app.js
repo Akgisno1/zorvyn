@@ -8,6 +8,8 @@ import recordRoutes from './routes/recordRoutes.js';
 import summaryRoutes from './routes/summaryRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import { errorHandler } from './middlewares/errorHandler.js';
+import swaggerUi from 'swagger-ui-express';
+import swaggerSpec from './config/swagger.js';
 
 const app = express();
 
@@ -15,6 +17,7 @@ app.use(express.json());
 app.use(cors());
 app.use(helmet());
 app.use(morgan('dev'));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Basic health check
 app.get('/health', (req, res) => res.status(200).json({ 
