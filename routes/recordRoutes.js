@@ -1,9 +1,16 @@
-const express=require('express');
-const {createRecord,getRecords}=require('../controllers/recordController');
-const {authenticate,authorise}=require('../middlewares/auth');
-const router=express.Router();
+import express from 'express';
+import { createRecord, getRecords, getRecordsByUser, updateRecord, deleteRecord } from '../controllers/recordController.js';
+import { authenticate } from '../middlewares/authenticate.js';
+import { authorize } from '../middlewares/authorize.js';
+import { validate } from '../middlewares/validate.js';
+import { recordSchema } from '../utils/schemas.js';
 
-router.post('/',authenticate,authorise(['ADMIN']),createRecord);
-router.get('/',authenticate,authorise(['ADMIN','ANALYST','VIEWER']),getRecords);
+const router = express.Router();
 
-module.exports=router;
+router.post('/', authenticate, validate(recordSchema), createRecord);
+router.get('/', authenticate, authorize(['ADMIN', 'ANALYST', 'VIEWER']), getRecords);
+router.get('/user/:userId', authenticate, authorize(['ADMIN']), getRecordsByUser);
+router.put('/:id', authenticate, validate(recordSchema), updateRecord);
+router.delete('/:id', authenticate, deleteRecord);
+
+export default router;
